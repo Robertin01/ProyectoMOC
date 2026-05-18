@@ -1,0 +1,87 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "ana.lopez@educastur.org",
+      "password": "$2a$12$kt2V/WJ4GSxtSFCi3quc5OFJjQYvShrtlqOeGDte4CsKTxLPjq14e"
+    },
+    {
+      "id": 2,
+      "email": "carlos.perez@educastur.org",
+      "password": "$2a$10$CwTycUXWue0Thq9StjUM0uJ8iF9ZrYbYg5OtTSHI3/xGaxmwoMPy6"
+    }
+  ],
+  "incidencias": [
+    {
+      "id": 1,
+      "titulo": "Impresora no imprime en Aula A302",
+      "descripcion": "La impresora no responde al enviar documentos.",
+      "usuario": {
+        "id": 1,
+        "email": "ana.lopez@educastur.org"
+      },
+      "nivel_urgencia": "Media",
+      "ubicacion": "A302",
+      "estado": "Cerrada",
+      "fecha_registro": "2025-10-01",
+      "comentarios": []
+    },
+    {
+      "id": 2,
+      "titulo": "No hay conexión a internet en Aula A301",
+      "descripcion": "No hay acceso a internet en toda el aula.",
+      "usuario": {
+        "id": 2,
+        "email": "carlos.perez@educastur.org"
+      },
+      "nivel_urgencia": "Alta",
+      "ubicacion": "A301",
+      "estado": "Pendiente",
+      "fecha_registro": "2025-10-01",
+      "comentarios": []
+    },
+    {
+      "id": 3,
+      "titulo": "Proyector no se enciende",
+      "descripcion": "El proyector no responde al botón de encendido.",
+      "usuario": {
+        "id": 3,
+        "email": "patricia.gomez@educastur.org"
+      },
+      "nivel_urgencia": "Alta",
+      "ubicacion": "Aula Magna",
+      "estado": "Pendiente",
+      "fecha_registro": "2025-10-01",
+      "comentarios": []
+    },
+    {
+      "titulo": "Problema en el aula de tecnologia",
+      "descripcion": "Ha habido un cortocircuito",
+      "categoria": "Abierta",
+      "urgencia": "Alta",
+      "ubicacion": "Tecnologia",
+      "usuario": {
+        "id": 1,
+        "email": "ana.lopez@educastur.org",
+        "password": "$2a$12$kt2V/WJ4GSxtSFCi3quc5OFJjQYvShrtlqOeGDte4CsKTxLPjq14e"
+      },
+      "estado": "Abierta",
+      "comentarios": [],
+      "fecha_registro": "2026-04-27",
+      "id": 4
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "nombre_rol": "comun",
+      "descripcion": "Usuario regular del sistema"
+    },
+    {
+      "id": 2,
+      "nombre_rol": "admin",
+      "descripcion": "Administrador del sistema"
+    }
+  ],
+  "comentarios": []
+}
