@@ -1,33 +1,55 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/Login";
 import ListaIncidencias from "./components/ListaIncidencias";
 import Form from "./components/Form";
+import Menu from "./components/Menu";
+import UserRoleManagement from "./components/Userrolemanagement";
 
 const API_URL = "http://localhost:3004";
-const LOGIN_API_URL = `${API_URL}/login`;
+
+function Inicio() {
+  return (
+    <div className="text-center mt-5">
+      <h2> Bienvenido a la gestión de incidencias</h2>
+      <p className="text-muted mt-3">
+        Usa el menú superior para navegar entre las secciones.
+      </p>
+    </div>
+  );
+}
 
 function App() {
   const [usuarioLogueado, setUsuarioLogueado] = useState(null);
   const [incidencias, setIncidencias] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const navigate = useNavigate();
 
-  // Cargar incidencias
-  useEffect(() => {
+  const cargarIncidencias = () => {
     fetch(`${API_URL}/incidencias`)
       .then((res) => res.json())
       .then((data) => setIncidencias(data));
-  }, []);
+  };
 
-  // Cargar usuarios
-  useEffect(() => {
+  const cargarUsuarios = () => {
     fetch(`${API_URL}/users`)
       .then((res) => res.json())
       .then((data) => setUsuarios(data));
+  };
+
+  useEffect(() => {
+    cargarIncidencias();
+    cargarUsuarios();
   }, []);
 
-  // LOGIN
+  // Recuperar sesión de localStorage al recargar
+  useEffect(() => {
+    const guardado = localStorage.getItem("usuarioLogueado");
+    if (guardado) setUsuarioLogueado(JSON.parse(guardado));
+  }, []);
+
   const onLogin = async (email, password) => {
-    const response = await fetch(LOGIN_API_URL, {
+    const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -37,25 +59,25 @@ function App() {
       const data = await response.json();
       setUsuarioLogueado(data.user);
       localStorage.setItem("usuarioLogueado", JSON.stringify(data.user));
+      navigate("/");
     } else {
-      const errorData = await response.json();
-      alert(`Fallo de autenticación. Error: ${response.status}: ${errorData}`);
+      alert("Credenciales incorrectas.");
     }
   };
 
-  // POST INCIDENCIA (UT05)
-  const agregarIncidencia = async (nueva) => {
-    // 1. Validar usuario
-    const usuarioEncontrado = usuarios.find(
-      (u) => u.email === nueva.email
-    );
+  const onCerrarSesion = () => {
+    setUsuarioLogueado(null);
+    localStorage.removeItem("usuarioLogueado");
+    navigate("/");
+  };
 
+  const agregarIncidencia = async (nueva) => {
+    const usuarioEncontrado = usuarios.find((u) => u.email === nueva.email);
     if (!usuarioEncontrado) {
       alert("Usuario no encontrado. Por favor, regístrese primero.");
       return;
     }
 
-    // 2. Crear objeto final
     const nuevaIncidencia = {
       titulo: nueva.titulo,
       descripcion: nueva.descripcion,
@@ -68,7 +90,6 @@ function App() {
       fecha_registro: new Date().toISOString().split("T")[0],
     };
 
-    // 3. POST
     const response = await fetch(`${API_URL}/incidencias`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -81,48 +102,56 @@ function App() {
     }
   };
 
-return (
-  <div className="container mt-4">
-
-    {!usuarioLogueado ? (
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <Login onLogin={onLogin} />
+  // Si no hay usuario logueado, mostrar login
+  if (!usuarioLogueado) {
+    return (
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-4">
+            <Login onLogin={onLogin} />
+          </div>
         </div>
       </div>
-    ) : (
-      <>
-        <div className="row">
-          {/* LISTADO IZQUIERDA */}
-          <div className="col-md-8 mb-4">
-            <ListaIncidencias incidencias={incidencias} />
-          </div>
+    );
+  }
 
-          {/* FORMULARIO DERECHA */}
-          <div className="col-md-4 mb-4">
-            <Form agregarIncidencia={agregarIncidencia} />
-          </div>
-        </div>
+  return (
+    <div>
+      <Menu usuarioLogueado={usuarioLogueado} onCerrarSesion={onCerrarSesion} />
 
-        {/* BOTÓN CERRAR SESIÓN ABAJO A LA DERECHA */}
-        <div className="d-flex justify-content-end mb-4">
-          <button
-            className="btn btn-danger btn-lg px-4"
-            onClick={() => {
-              setUsuarioLogueado(null);
-              localStorage.removeItem("usuarioLogueado");
-            }}
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      </>
-    )}
-
-  </div>
-);
-
-
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route
+            path="/incidencias"
+            element={
+              <ListaIncidencias
+                incidencias={incidencias}
+                usuarioLogueado={usuarioLogueado}
+                cargarIncidencias={cargarIncidencias}
+              />
+            }
+          />
+          <Route
+            path="/registrar"
+            element={<Form agregarIncidencia={agregarIncidencia} />}
+          />
+          {usuarioLogueado?.rol === "admin" && (
+            <Route
+              path="/usuarios"
+              element={
+                <UserRoleManagement
+                  usuarios={usuarios}
+                  cargarUsuarios={cargarUsuarios}
+                  API_URL={API_URL}
+                />
+              }
+            />
+          )}
+        </Routes>
+      </div>
+    </div>
+  );
 }
 
 export default App;
