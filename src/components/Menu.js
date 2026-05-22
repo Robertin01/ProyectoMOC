@@ -8,7 +8,7 @@ function Menu({ usuarioLogueado, onCerrarSesion }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div className="container-fluid">
-        <span className="navbar-brand fw-bold">🛠️ Gestión de Incidencias</span>
+        <span className="navbar-brand fw-bold">Gestión de Incidencias</span>
 
         {/* Botón hamburguesa para móvil */}
         <button
@@ -31,7 +31,7 @@ function Menu({ usuarioLogueado, onCerrarSesion }) {
                 className={`nav-link ${isActive("/") ? "active fw-bold" : ""}`}
                 to="/"
               >
-                🏠 Inicio
+                 Inicio
               </Link>
             </li>
             <li className="nav-item">
@@ -39,7 +39,7 @@ function Menu({ usuarioLogueado, onCerrarSesion }) {
                 className={`nav-link ${isActive("/incidencias") ? "active fw-bold" : ""}`}
                 to="/incidencias"
               >
-                📋 Ver incidencias
+                 Ver incidencias
               </Link>
             </li>
             <li className="nav-item">
@@ -47,7 +47,7 @@ function Menu({ usuarioLogueado, onCerrarSesion }) {
                 className={`nav-link ${isActive("/registrar") ? "active fw-bold" : ""}`}
                 to="/registrar"
               >
-                ➕ Registrar incidencia
+                 Registrar incidencia
               </Link>
             </li>
 
@@ -58,7 +58,7 @@ function Menu({ usuarioLogueado, onCerrarSesion }) {
                   className={`nav-link ${isActive("/usuarios") ? "active fw-bold" : ""}`}
                   to="/usuarios"
                 >
-                  👥 Gestión de usuarios
+                   Gestión de usuarios
                 </Link>
               </li>
             )}

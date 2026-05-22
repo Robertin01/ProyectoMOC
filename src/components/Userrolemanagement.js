@@ -42,7 +42,7 @@ function UserRoleManagement({ usuarios, cargarUsuarios, API_URL }) {
           className="btn btn-primary btn-sm"
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
         >
-          {mostrarFormulario ? "Cancelar" : "➕ Nuevo usuario"}
+          {mostrarFormulario ? "Cancelar" : " Nuevo usuario"}
         </button>
       </div>
 
